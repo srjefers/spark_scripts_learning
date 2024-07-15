@@ -1,5 +1,6 @@
+# https://stackoverflow.com/a/78746946/7102575
 from pyspark.sql import SparkSession, HiveContext
-from pyspark.sql.functions import split
+from pyspark.sql.functions import split, lit, concat, col
 #import pyspark.sql.functions as F
 
 
@@ -8,19 +9,19 @@ spark = (SparkSession
          .appName('exersice_1')
          .getOrCreate())
 
-#sqlCtx= HiveContext(spark)
-
 df = spark.createDataFrame([("50000.0#0#0#", "#"),
   ("0@1000.0@", "@"),
   ("1$", "$"),
   ("1000.00^Test_string", "^")],["VALUES", "Delimiter"])
+
+df = df.withColumn('DelimiterEscaped',concat(lit('\\'), col('Delimiter')))
 
 df.registerTempTable("cleanTable")
 
 df2 = spark.sql("""
                 SELECT 
                     VALUES, cast(Delimiter as string),
-                    split(cast(VALUES as string), cast(Delimiter as string)) as split_values
+                    split(cast(VALUES as string), cast(DelimiterEscaped as string)) as split_values
                 FROM cleanTable
                 """)
 
