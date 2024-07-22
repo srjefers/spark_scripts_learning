@@ -1,9 +1,13 @@
+"""
+    url: https://jaceklaskowski.github.io/spark-workshop/exercises/sql/explode-structs-array.html
+"""
+
 from pyspark.sql.functions import col, explode
 from pyspark.sql import SparkSession, HiveContext
 
 spark = (SparkSession
          .builder
-         .appName('exersice_6')
+         .appName('exersice_7')
          .getOrCreate())
 
 df = spark.read.json('input.json', multiLine=True)
