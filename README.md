@@ -4,6 +4,9 @@
 ```
 pyspark < exersice.py
 ```
+## TO-DO
+Would be great if we can create a game such like snake or the other one with cubes that drops down
+
 ## References
 * [spark-workshop](https://jaceklaskowski.github.io/spark-workshop/exercises/)
 * [kafka-workshop](https://jaceklaskowski.github.io/kafka-workshop/exercises/)
