@@ -1,16 +1,23 @@
 """
     url: https://nxcals-docs.web.cern.ch/current/user-guide/examples/standalone-app/
+    execution: /opt/spark/bin/spark-submit /home/kernelpanic/Documents/SPARK/spark_sql/exercise_16/exercise_16.py --csv_file=/home/kernelpanic/Documents/SPARK/spark_sql/exercise_16/input.csv --columns=city
 """
 from pyspark import SparkContext
 from pyspark.conf import SparkConf
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import upper, col
 import re
+import argparse
+import os
 
 
-def main():
-    csv_file = 'input.csv'
-    column_cast = ['city']
+def main(args: dict) -> DataFrame:
+    csv_file = args.csv_file
+    column_cast = args.columns
+    print('------------------------------')
+    print(column_cast)
+    # ['city']
+
     conf = (SparkConf()
             .setAppName("exersice_16")
             .setMaster('local')
@@ -32,8 +39,15 @@ def main():
         if value_type_str:
             df = df.withColumn('upper_' + str(column), upper(col(column)))
 
+    df.show()
     return df
 
+def list_of_strings(arg):
+    return arg.split(',')
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description='Ingest data to Postgres.')
+    parser.add_argument('--csv_file', help='csv file')
+    parser.add_argument('--columns', help='columns', type=list_of_strings)
+    args = parser.parse_args()
+    main(args)
