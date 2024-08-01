@@ -1,6 +1,6 @@
 """
     url: https://nxcals-docs.web.cern.ch/current/user-guide/examples/standalone-app/
-    execution: /opt/spark/bin/spark-submit /home/kernelpanic/Documents/SPARK/spark_sql/exercise_16/exercise_16.py --csv_file=/home/kernelpanic/Documents/SPARK/spark_sql/exercise_16/input.csv --columns=city
+    execution: /opt/spark/bin/spark-submit /home/kernelpanic/Documents/SPARK/spark_sql/exercise_16/exercise_16.py --csv_file=/home/kernelpanic/Documents/SPARK/spark_sql/exercise_16/input.csv --columns=city,country
 """
 from pyspark import SparkContext
 from pyspark.conf import SparkConf
