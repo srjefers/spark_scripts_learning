@@ -9,13 +9,7 @@ filePath = "/home/kernelpanic/Documents/SPARK/spark_sql/spark_pivot/BaseDatos.xl
 pdf = pandas.read_excel(filePath, sheet_name='1')
 df = spark.createDataFrame(pdf)
 
-#df = df.withColumn('id_c', monotonically_increasing_id())
-df.show()
-
-unpivotExp = "stack(5, '2018', 2018, '2019', 2019, '2020', 2020, '2021', 2021, '2022', 2022) as (year, val)"
-df2 = df.select('State or territory','Type', 'Unnamed: 2',expr(unpivotExp))
-#df2.repartition(1).write.option("header", "true").csv('model_1.csv', mode = 'append')
-# .save('model_1.csv')
+df2 = df.unpivot(['State or territory','Type', 'Unnamed: 2'],['2018', '2019', '2020', '2021', '2022'], 'year','value')
 
 df2.toPandas().to_csv('model_1.csv')
 

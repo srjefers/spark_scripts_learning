@@ -7,6 +7,10 @@ spark = SparkSession.builder.appName("pivot_script_2").getOrCreate()
 filePath = "/home/kernelpanic/Documents/SPARK/spark_sql/spark_pivot/BaseDatos.xlsx"
 
 pdf = pandas.read_excel(filePath, sheet_name='4')
+
+for column in columns:
+    df = df.withColumn(column.replace('.','-'), col(column))
+
 df = spark.createDataFrame(pdf)
 
 #df.show()
