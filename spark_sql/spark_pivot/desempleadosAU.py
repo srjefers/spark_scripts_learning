@@ -1,5 +1,6 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, monotonically_increasing_id, split
+from pyspark.sql.functions import col, monotonically_increasing_id, split, regexp_replace
+from pyspark.sql.types import StringType
 import pandas
 
 spark = SparkSession.builder.appName("desempleadosAU").getOrCreate()
@@ -73,7 +74,15 @@ df2 = df2.withColumn('Series_End',split(df2['compose_value'],',').getItem(7))
 df2 = df2.withColumn('No_Obs',split(df2['compose_value'],',').getItem(8))
 df2 = df2.withColumn('Series_ID',split(df2['compose_value'],',').getItem(9))
 
+
+
+pattern = r'(?:.*)YEAR=(\d+).+?MONTH=(\d+).+?DAY_OF_MONTH=(\d+).+?HOUR=(\d+).+?MINUTE=(\d+).+?SECOND=(\d+).+'
+
+df2 = df2.withColumn('Unnamed: 0', regexp_replace('Unnamed: 0', pattern, '$1-$2-$3 $4:$5:$6').cast('timestamp'))
+
 df2 = df2.drop('compose_value')
+
+#df2 = df2.drop('Unnamed: 0')
 
 #df2.show()
 
