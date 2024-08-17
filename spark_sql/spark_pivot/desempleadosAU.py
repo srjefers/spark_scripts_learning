@@ -35,12 +35,11 @@ Series_ID.remove('Series ID')
 header = list(zip(columns, Unit, Series_Type, Data_Type, Frequency, Collection_Month, Series_Start, Series_End, No_Obs, Series_ID))
 header_list = [list(pair) for pair in header]
 
-column_name = []
+column_name_list = []
 for column in header_list:
-    column[0] = column[0].replace('.1','').replace('.2','')
-    
-    column_name = f'{str(column[0])},{str(column[1])},{str(column[2])},{str(column[3])},{str(column[4])},{str(column[5])},{str(column[6])},{str(column[7])},{str(column[8])},{str(column[9])}' 
-
+    column_0 = column[0].replace('.1','').replace('.2','')
+    column_name = f'{str(column_0)},{str(column[1])},{str(column[2])},{str(column[3])},{str(column[4])},{str(column[5])},{str(column[6])},{str(column[7])},{str(column[8])},{str(column[9])}' 
+    column_name_list.append(column_name)
     pdf.rename(columns={column[0]:  column_name}, inplace=True)
 
 
@@ -59,8 +58,10 @@ depreacted_rows = [
 ]
 df = df.filter(~df['Unnamed: 0'].isin(depreacted_rows))
 
+#print(column_name_list)
+
 df2 = df.unpivot('Unnamed: 0',
-        column_name,
+        column_name_list,
         'compose_value','value')
 
 df2 = df2.withColumn('description',split(df2['compose_value'],',').getItem(0))
