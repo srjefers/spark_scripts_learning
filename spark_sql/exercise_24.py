@@ -3,7 +3,7 @@
 """
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col
+from pyspark.sql.functions import col, max
 
 
 sc = SparkContext("local", "Simple App")
@@ -14,6 +14,8 @@ spark = (SparkSession
          .getOrCreate())
 
 nums = spark.range(5).withColumn("group", col("id") % 2)
+
+nums.groupBy(['group']).agg(max('id')).show()
 #nums.show()
 
 nums.registerTempTable("numsTable")
