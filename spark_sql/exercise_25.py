@@ -3,25 +3,16 @@
 """
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, max
+from pyspark.sql.functions import col, collect_list
 
 sc = SparkContext("local", "Simple App")
 
 spark = (SparkSession
          .builder
-         .appName('exersice_24')
+         .appName('exersice_25')
          .getOrCreate())
 
 nums = spark.range(5).withColumn("group", col("id") % 2)
 
-nums.groupBy(['group']).agg(max('id')).show()
-#nums.show()
-
-nums.registerTempTable("numsTable")
-df = spark.sql("""
-    select group, max(id)
-    from numsTable
-    group by group
-""")
-
-df.show()
+nums.groupBy(['group']).agg(collect_list('id')).show()
+nums.show()
