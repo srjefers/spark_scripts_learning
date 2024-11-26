@@ -21,7 +21,7 @@ df = spark.createDataFrame([
     (2, "C", 2321, "201601", "DOCK")
 ],["id","type", "cost", "date", "ship"])
 
-result_1 = df.groupBy('id','type').pivot('date',['201603','201602','201601']).sum('cost')
+result_1 = df.groupBy('id','type').pivot('date',['201603','201602','201601']).agg(first('cost'))
 result_1.show()
 
 result_2 = df.groupBy('id','type').pivot('date',['201603','201602','201601']).agg(first('ship'))
