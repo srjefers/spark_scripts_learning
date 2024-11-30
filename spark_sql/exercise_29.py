@@ -3,7 +3,7 @@
 """
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import concat, first
+from pyspark.sql.functions import concat_ws, first,lit, col
 
 sc = SparkContext("local", "Simple App")
 
@@ -29,4 +29,5 @@ df = spark.createDataFrame([
 
 result = df.groupBy('id').pivot('day',['1','2','3','4']).agg(first('price').alias('price'), first('units').alias('units'))
 
-result.show()
+#result.show()
+result.select([col(c).name('_'.join(x for x in c.split('_')[::-1])) for c in result.columns]).show()
