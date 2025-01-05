@@ -23,6 +23,7 @@ def main(params):
 
     df.createOrReplaceTempView('tmp_data_df')
     df = spark.sql(str(params.sql_query))
+    
     df.show()
 
 if __name__ == '__main__':
