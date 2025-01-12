@@ -10,3 +10,4 @@ spark = (SparkSession
          .builder
          .appName('exersice_42')
          .getOrCreate())
+
