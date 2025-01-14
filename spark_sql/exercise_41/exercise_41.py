@@ -14,11 +14,23 @@ spark = (SparkSession
 
 df = spark.read.options(delimiter=',', inferSchema=True, header=True).csv('data.csv')
 
-w = Window.partitionBy('id').orderBy('time')
-result = df.select(col('id'), col('time'), rank().over(w).alias('rnk')).\
-            groupBy(col('id'),col('time'),col('rnk')).\
-            agg(count('*').alias('count'))
-#df = df.withColumn('drank', rank().over(w))
-#df.show()
+df.registerTempTable('dfTable')
+spark.sql("""
+    with grp_cte as (
+        select 
+            id, time,
+            time - row_number() over (partition by id order by time) as grp
+        from dfTable           
+    ),
+    final as (
+        select 
+            id, count(grp) cnt
+        from grp_cte
+        group by id, grp
+    )
+    select 
+        id, max(cnt) time
+    from final
+    group by id
+""").show()
 
-result.show()
