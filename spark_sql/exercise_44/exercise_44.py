@@ -3,6 +3,7 @@
 """
 from pyspark import SparkContext
 from pyspark.sql import SparkSession
+from pyspark.sql.functions import sum, avg
 
 sc = SparkContext("local", "Simple App")
 
@@ -13,4 +14,4 @@ spark = (SparkSession
 
 df = spark.read.options(delimiter=',',inferSchema=True,header=True).csv('data.csv')
 
-df.show()
+df.rollup(df.department).agg(sum('salary').alias('sum'), avg('salary').alias('avg')).show()
